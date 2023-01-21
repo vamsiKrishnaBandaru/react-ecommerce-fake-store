@@ -17,11 +17,17 @@ class App extends React.Component {
   }
 
   FetchData = () => {
-    axios.get('https://fakestoreapi.com/products')
+    this.setState({
+      loading: true,
+      fetchError: false,
+    })
+
+    axios.get('https://fakestoreapicom/products')
       .then((response) => {
         console.log(response.data)
         this.setState({
-          AllProducts: response.data
+          AllProducts: response.data,
+          loading: false
         })
       })
 
@@ -39,15 +45,49 @@ class App extends React.Component {
       <div className="App">
         <Header />
 
+        {
+          this.state.loading && <Loader />
+        }
+
+        <div className="main">
+          <ul>
+            {
+              this.state.AllProducts.map((product) => {
+                return (
+                  <Products
+                    key={product.id}
+                    category={product.category}
+                    image={product.image}
+                    title={product.title}
+                    description={product.description}
+                    rate={product.rating.rate}
+                    count={product.rating.count}
+                    price={product.price}
+                  />
+                )
+              })
+            }
+          </ul>
+        </div>
+
+        {/* {
+          !this.state.loading &&
+          !this.state.fetchError &&
+          (
+            <p className="error-message">No news found</p>
+          )
+        } */}
 
         {
-          this.state.AllProducts.map((product) => {
-            return (
-              <Products
-                title={product.title}
-              />
-            )
-          })
+          !this.state.loading &&
+          this.state.fetchError &&
+          (
+            <div className="error-message">
+              <i className="fa fa-exclamation-circle"></i>
+              <h2>Oops! Something went wrong</h2>
+              <h5>This page didn't load: Fetching from the API is failed.</h5>
+            </div>
+          )
         }
 
         <Footer />
