@@ -12,7 +12,8 @@ class App extends React.Component {
     this.state = {
       loading: false,
       fetchError: false,
-      AllProducts: []
+      AllProducts: [],
+      errorMessage: ''
     }
   }
 
@@ -22,20 +23,40 @@ class App extends React.Component {
       fetchError: false,
     })
 
-    axios.get('https://fakestoreapicom/products')
+    axios.get('https://fakestoreapi.com/products')
       .then((response) => {
-        console.log(response.data)
-        this.setState({
-          AllProducts: response.data,
-          loading: false
-        })
+
+        let data = response.data
+        if (data == null || !Array.isArray(data)) {
+
+          this.setState({
+            fetchError: true,
+            loading: false,
+            errorMessage: 'Failed to load products'
+          })
+
+        } else {
+          this.setState({
+            AllProducts: response.data,
+            loading: false
+          })
+        }
+
       })
 
-      .catch(() => {
-        console.log('error fetching');
+      .catch((error) => {
+        let message = ''
+
+        if (error.request) {
+          message = "Failed to load: No response was received"
+        } else {
+          message = "This page didn't load: Fetching from the API is failed."
+        }
+
         this.setState({
           fetchError: true,
-          loading: false
+          loading: false,
+          errorMessage: message
         })
       });
   }
@@ -70,14 +91,6 @@ class App extends React.Component {
           </ul>
         </div>
 
-        {/* {
-          !this.state.loading &&
-          !this.state.fetchError &&
-          (
-            <p className="error-message">No news found</p>
-          )
-        } */}
-
         {
           !this.state.loading &&
           this.state.fetchError &&
@@ -85,7 +98,7 @@ class App extends React.Component {
             <div className="error-message">
               <i className="fa fa-exclamation-circle"></i>
               <h2>Oops! Something went wrong</h2>
-              <h5>This page didn't load: Fetching from the API is failed.</h5>
+              <h5>{this.state.errorMessage}</h5>
             </div>
           )
         }
