@@ -1,8 +1,6 @@
 function Loader() {
-   return (
-     <div className="loader">
-       <div className="lds-dual-ring"></div>
-     </div>
-   );
- }
- export default Loader;
+  return (
+    <div className="lds-dual-ring"></div>
+  );
+}
+export default Loader;
