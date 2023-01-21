@@ -10,6 +10,8 @@ class Products extends React.Component {
             <p>{this.props.description.slice(0, 75)}...</p>
             <div className="rating">{this.props.rate}({this.props.count})</div>
             <div className="price">${this.props.price}</div>
+            <button className="AddtoCart">
+               <i className="fa fa-shopping-cart" /> Add to cart</button>
          </li>
       );
    }
