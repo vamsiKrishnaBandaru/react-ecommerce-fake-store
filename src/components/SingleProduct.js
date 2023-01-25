@@ -10,7 +10,7 @@ class SingleProduct extends Component {
          SingleProduct: '',
          fetchError: false,
          loading: true,
-         showNoProducts:false,
+         showNoProducts: false,
          AllProducts: [],
          errorMessage: ''
       }
@@ -46,7 +46,7 @@ class SingleProduct extends Component {
             this.setState({
                fetchError: true,
                loading: false,
-               showNoProducts:true,
+               showNoProducts: true,
                errorMessage: message
             })
          });

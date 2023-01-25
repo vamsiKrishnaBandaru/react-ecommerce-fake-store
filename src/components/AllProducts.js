@@ -26,7 +26,7 @@ class AllProducts extends React.Component {
          .then((response) => {
 
             let data = response.data
-            if (data == null || !Array.isArray(data)) {
+            if (data === null || !Array.isArray(data)) {
 
                this.setState({
                   fetchError: true,
