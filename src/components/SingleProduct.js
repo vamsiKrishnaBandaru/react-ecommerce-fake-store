@@ -69,13 +69,7 @@ class SingleProduct extends Component {
                      <p>{product.description}</p>
                      <div className="rating">{product.rating.rate}({product.rating.count})</div>
                      <div className="price">${product.price}</div>
-                     <button className="AddtoCart" 
-                     // onClick=
-                     //    {
-                     //       () =>
-                     //          <Cart cartItem={product} />
-                     //    }
-                     > <i className="fa fa-shopping-cart" /> Add to cart</button>
+                     <button className="AddtoCart"> <i className="fa fa-shopping-cart" /> Add to cart</button>
                   </div>
                </div>
             }

@@ -66,9 +66,11 @@ class Cart extends React.Component {
                         this.state.AllCartItems.products.map(product => {
                            return (
                               <li key={product.productId}>
-                                 <CartsItems productId={product.productId}
-                                    quantity={product.quantity}
-                                 />
+                                 <Link to={`/product/${product.productId}`}>
+                                    <CartsItems productId={product.productId}
+                                       quantity={product.quantity}
+                                    />
+                                 </Link>
                               </li>
                            )
                         })

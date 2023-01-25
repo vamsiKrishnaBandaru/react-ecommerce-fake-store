@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Loader from './Loader'
 import NoProducts from './NoProducts';
+import { Link } from 'react-router-dom';
 
 class CartsItems extends Component {
    constructor(props) {
@@ -57,7 +58,7 @@ class CartsItems extends Component {
             }
 
             {
-               !this.state.loading && Object.keys(product).includes('title') === true &&
+               !this.state.loading && !this.state.fetchError && Object.keys(product).includes('title') === true &&
                <div className='CartItem'>
                   <div>
                      <img src={product.image}></img>
@@ -67,14 +68,19 @@ class CartsItems extends Component {
                      <p>{product.description.slice(0, 75)}...</p>
                      <div className="rating">{product.rating.rate}({product.rating.count})</div>
                      <div className="price">${product.price}</div>
-                     <h3>Quantity: {this.props.quantity}</h3>
+                     <div className='quantityContainer'>
+                        <button className='Decrement' onClick={this.Decrement}>-</button>
+                        <h3>Quantity: {this.props.quantity}</h3>
+                        <button className='Increment' onClick={this.Increment}>+</button>
+                     </div>
+                     <h5 className='totalProductCost'>total = ${product.price * this.props.quantity}</h5>
                   </div>
                </div>
             }
 
             {
-               this.state.showNoProducts === true &&
-               this.state.loading === false &&
+               this.state.showNoProducts &&
+               !this.state.loading &&
                <NoProducts />
             }
 
