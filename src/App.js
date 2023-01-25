@@ -15,7 +15,7 @@ class App extends Component {
           <Route path="/" exact>
             <AllProducts />
           </Route>
-          <Route path="/product/:id" component={SingleProduct}>
+          <Route path="/product/:id" exact component={SingleProduct}>
           </Route>
           <Footer />
         </div>
