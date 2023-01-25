@@ -11,7 +11,7 @@ class Header extends React.Component {
             <div className="headerContents">
                <li> <Link to="/"><button>Home</button></Link> </li>
                <li> <Link to="/"><button>Menu</button></Link> </li>
-               <li> <Link to="/"><button>Cart</button></Link> </li>
+               <li> <Link to="/cart"><button>Cart</button></Link> </li>
             </div>
             <div>
                <div className="buttons">

@@ -5,6 +5,7 @@ import Footer from "./components/Footer"
 import AllProducts from "./components/AllProducts"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 import SingleProduct from "./components/SingleProduct"
+import Cart from "./components/Cart"
 
 class App extends Component {
   render() {
@@ -17,6 +18,9 @@ class App extends Component {
               <AllProducts />
             </Route>
             <Route path="/product/:id" exact component={SingleProduct}>
+            </Route>
+            <Route path="/cart" exact>
+              <Cart />
             </Route>
             <Footer />
           </div>

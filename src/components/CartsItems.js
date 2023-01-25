@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import axios from "axios";
-import Loader from './Loader';
+import axios from 'axios'
+import Loader from './Loader'
 import NoProducts from './NoProducts';
 
-class SingleProduct extends Component {
+class CartsItems extends Component {
    constructor(props) {
       super(props);
       this.state = {
@@ -16,7 +16,7 @@ class SingleProduct extends Component {
    }
 
    componentDidMount() {
-      axios.get(`https://fakestoreapi.com/products/${this.props.match.params.id}`)
+      axios.get(`https://fakestoreapi.com/products/${this.props.productId}`)
          .then((response) => {
             let data = response.data
             if (data === "") {
@@ -44,12 +44,10 @@ class SingleProduct extends Component {
 
             this.setState({
                fetchError: true,
-               loading: false,
                errorMessage: message
             })
          });
    }
-
    render() {
       let product = this.state.SingleProduct
       return (
@@ -60,22 +58,16 @@ class SingleProduct extends Component {
 
             {
                !this.state.loading && Object.keys(product).includes('title') === true &&
-               < div className='singleProduct'>
+               <div className='CartItem'>
                   <div>
                      <img src={product.image}></img>
                   </div>
                   <div className='content'>
                      <h3 className="title">{product.title}</h3>
-                     <p>{product.description}</p>
+                     <p>{product.description.slice(0, 75)}...</p>
                      <div className="rating">{product.rating.rate}({product.rating.count})</div>
                      <div className="price">${product.price}</div>
-                     <button className="AddtoCart" 
-                     // onClick=
-                     //    {
-                     //       () =>
-                     //          <Cart cartItem={product} />
-                     //    }
-                     > <i className="fa fa-shopping-cart" /> Add to cart</button>
+                     <h3>Quantity: {this.props.quantity}</h3>
                   </div>
                </div>
             }
@@ -102,4 +94,4 @@ class SingleProduct extends Component {
    }
 }
 
-export default SingleProduct
+export default CartsItems
