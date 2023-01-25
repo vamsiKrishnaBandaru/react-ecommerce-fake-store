@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from "axios";
 import Loader from './Loader';
+import NoProducts from './NoProducts';
 
 class SingleProduct extends Component {
    constructor(props) {
@@ -9,6 +10,7 @@ class SingleProduct extends Component {
          SingleProduct: '',
          fetchError: false,
          loading: true,
+         showNoProducts:false,
          AllProducts: [],
          errorMessage: ''
       }
@@ -18,10 +20,18 @@ class SingleProduct extends Component {
       axios.get(`https://fakestoreapi.com/products/${this.props.match.params.id}`)
          .then((response) => {
             let data = response.data
-            this.setState({
-               SingleProduct: data,
-               loading: false
-            })
+            if (data === "") {
+               this.setState({
+                  showNoProducts: true,
+                  loading: false
+               })
+
+            } else {
+               this.setState({
+                  SingleProduct: data,
+                  loading: false
+               })
+            }
          })
 
          .catch((error) => {
@@ -36,6 +46,7 @@ class SingleProduct extends Component {
             this.setState({
                fetchError: true,
                loading: false,
+               showNoProducts:true,
                errorMessage: message
             })
          });
@@ -50,22 +61,25 @@ class SingleProduct extends Component {
             }
 
             {
-               !this.state.loading && Object.keys(product).includes('title') ?
-                  <div className='singleProduct'>
-                     <div>
-                        <img src={product.image}></img>
-                     </div>
-                     <div className='content'>
-                        <h3 className="title">{product.title}</h3>
-                        <p>{product.description}</p>
-                        <div className="rating">{product.rating.rate}({product.rating.count})</div>
-                        <div className="price">${product.price}</div>
-                        <button className="AddtoCart"> <i className="fa fa-shopping-cart" /> Add to cart</button>
-                     </div>
-                  </div> : <div className="error-message">
-                     <h5>No products available</h5>
+               !this.state.loading && Object.keys(product).includes('title') === true &&
+               < div className='singleProduct'>
+                  <div>
+                     <img src={product.image}></img>
                   </div>
+                  <div className='content'>
+                     <h3 className="title">{product.title}</h3>
+                     <p>{product.description}</p>
+                     <div className="rating">{product.rating.rate}({product.rating.count})</div>
+                     <div className="price">${product.price}</div>
+                     <button className="AddtoCart"> <i className="fa fa-shopping-cart" /> Add to cart</button>
+                  </div>
+               </div>
 
+            }
+            {
+               this.state.showNoProducts === true &&
+               this.state.loading === false &&
+               <NoProducts />
             }
 
             {
