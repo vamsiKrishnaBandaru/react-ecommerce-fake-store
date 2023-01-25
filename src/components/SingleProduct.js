@@ -87,7 +87,9 @@ class SingleProduct extends Component {
                this.state.fetchError &&
                (
                   <div className="error-message">
-                     <h5>{this.state.errorMessage}nope</h5>
+                     <i className="fa fa-exclamation-circle"></i>
+                     <h2>Oops! Something went wrong</h2>
+                     <h5>{this.state.errorMessage}</h5>
                   </div>
                )
             }
