@@ -22,7 +22,6 @@ header {
   font-weight: 500;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
 }
 .headerContents {
   display: flex;
@@ -167,6 +166,10 @@ footer ul {
 .support a {
   text-decoration: none;
   font-size: 1.1rem;
+}
+Link {
+  text-decoration: none;
+  text-decoration-line: none;
 }
 
 footer li:hover {
