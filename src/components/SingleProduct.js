@@ -46,7 +46,6 @@ class SingleProduct extends Component {
             this.setState({
                fetchError: true,
                loading: false,
-               showNoProducts: true,
                errorMessage: message
             })
          });
