@@ -107,7 +107,6 @@ class AllProducts extends React.Component {
    }
    componentDidMount() {
       this.FetchData()
-      console.log('mounting...')
    }
 }
 
