@@ -2,7 +2,6 @@ import React from 'react'
 import axios from "axios";
 import Loader from './Loader';
 import "../App.css"
-import { Link } from "react-router-dom";
 import CartsItems from './CartsItems';
 
 class Cart extends React.Component {
@@ -27,7 +26,13 @@ class Cart extends React.Component {
 
             let data = response.data
             console.log(data)
-            if (data) {
+            if (data === null || !data) {
+               this.setState({
+                  fetchError: true,
+                  loading: false,
+                  errorMessage: 'No cart data available'
+               })
+            } else {
                this.setState({
                   AllCartItems: response.data,
                   loading: false
@@ -66,11 +71,9 @@ class Cart extends React.Component {
                         this.state.AllCartItems.products.map(product => {
                            return (
                               <li key={product.productId}>
-                                 <Link to={`/product/${product.productId}`}>
-                                    <CartsItems productId={product.productId}
-                                       quantity={product.quantity}
-                                    />
-                                 </Link>
+                                 <CartsItems productId={product.productId}
+                                    quantity={product.quantity}
+                                 />
                               </li>
                            )
                         })

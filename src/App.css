@@ -38,7 +38,7 @@ header a {
 a button {
   border: none;
 }
-header button:hover {
+button:hover {
   cursor: pointer;
   transform: scale(1.05);
 }
@@ -196,14 +196,16 @@ a {
   font-size: 0.77rem;
   align-self: flex-end;
 }
-.content button:hover {
-  transform: scale(1.07);
-  cursor: pointer;
-}
+
 .CartContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.content a{
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
 }
 .Cart {
   text-align: center;
@@ -340,5 +342,8 @@ footer li:hover {
   .CartItem {
     flex-direction: column;
     padding: 1rem;
+  }
+  .CartItem img {
+    width: 100%;
   }
 }

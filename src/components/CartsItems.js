@@ -61,11 +61,15 @@ class CartsItems extends Component {
                !this.state.loading && !this.state.fetchError && Object.keys(product).includes('title') === true &&
                <div className='CartItem'>
                   <div>
-                     <img src={product.image}></img>
+                     <Link to={`/product/${this.props.productId}`}>
+                        <img src={product.image}></img>
+                     </Link>
                   </div>
                   <div className='content'>
-                     <h3 className="title">{product.title}</h3>
-                     <p>{product.description.slice(0, 75)}...</p>
+                     <Link to={`/product/${this.props.productId}`}>
+                        <h3 className="title">{product.title}</h3>
+                        <p>{product.description.slice(0, 120)}...</p>
+                     </Link>
                      <div className="rating">{product.rating.rate}({product.rating.count})</div>
                      <div className="price">${product.price}</div>
                      <div className='quantityContainer'>
