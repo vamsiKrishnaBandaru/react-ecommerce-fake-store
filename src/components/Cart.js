@@ -25,7 +25,6 @@ class Cart extends React.Component {
          .then((response) => {
 
             let data = response.data
-            console.log(data)
             if (data === null || !data) {
                this.setState({
                   fetchError: true,
