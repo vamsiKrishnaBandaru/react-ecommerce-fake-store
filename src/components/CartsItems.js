@@ -25,7 +25,6 @@ class CartsItems extends Component {
                   showNoProducts: true,
                   loading: false
                })
-
             } else {
                this.setState({
                   SingleProduct: data,
@@ -72,11 +71,11 @@ class CartsItems extends Component {
                      </Link>
                      <div className="rating">{product.rating.rate}({product.rating.count})</div>
                      <div className="price">${product.price}</div>
-                     <div className='quantityContainer'>
+                     <h3>Quantity: {this.props.quantity}</h3>
+                     {/* <div className='quantityContainer'>
                         <button className='Decrement' onClick={this.Decrement}>-</button>
-                        <h3>Quantity: {this.props.quantity}</h3>
-                        <button className='Increment' onClick={this.Increment}>+</button>
-                     </div>
+                                                <button className='Increment' onClick={this.Increment}>+</button>
+                     </div> */}
                      <h5 className='totalProductCost'>total = ${product.price * this.props.quantity}</h5>
                   </div>
                </div>
