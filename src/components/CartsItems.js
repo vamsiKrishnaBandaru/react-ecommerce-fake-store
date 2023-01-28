@@ -49,10 +49,6 @@ class CartsItems extends Component {
       this.fetchData(this.URL)
    }
 
-   reloadData = () => {
-      this.fetchData(this.URL)
-   }
-
    render() {
       let product = this.state.SingleProduct
       return (

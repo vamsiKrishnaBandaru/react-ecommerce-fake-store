@@ -45,9 +45,6 @@ class AllProducts extends React.Component {
    componentDidMount() {
       this.FetchData(this.URL)
    }
-   reloadData = () => {
-      this.FetchData(this.URL)
-   }
 
    render() {
       let products = this.state.products;

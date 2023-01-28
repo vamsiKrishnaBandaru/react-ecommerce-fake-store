@@ -47,10 +47,6 @@ class Cart extends React.Component {
       this.fetchData(this.URL)
    }
 
-   reloadData = () => {
-      this.fetchData(this.URL)
-   }
-
    render() {
       let AllCartItems = this.state.AllCartItems
       return (
@@ -110,9 +106,6 @@ class Cart extends React.Component {
             }
          </>
       )
-   }
-   componentDidMount() {
-      this.FetchData()
    }
 }
 
