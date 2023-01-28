@@ -64,7 +64,7 @@ class CartsItems extends Component {
             }
 
             {
-               this.state.status === this.API_STATES.LOADED && product !== null &&
+               this.state.status === this.API_STATES.LOADED && product === null &&
                <div className='error'>
                   <h1>No products available at the moment. Please try after some time</h1>
                </div>
