@@ -8,69 +8,76 @@ import { Link } from "react-router-dom";
 class AllProducts extends React.Component {
    constructor(props) {
       super(props)
-      this.state = {
-         loading: false,
-         fetchError: false,
-         AllProducts: [],
-         errorMessage: ''
+
+      this.API_STATES = {
+         LOADING: "loading",
+         LOADED: 'loaded',
+         ERROR: 'error',
       }
+
+      this.state = {
+         status: this.API_STATES.LOADING,
+         products: [],
+         errorMessage: ''
+      };
+      this.URL = 'https://fakestoreapi.com/products'
    }
 
-   FetchData = () => {
+   FetchData = (url) => {
       this.setState({
-         loading: true,
-         fetchError: false,
-      })
-
-      axios.get('https://fakestoreapi.com/products')
-         .then((response) => {
-
-            let data = response.data
-            if (data === null || !Array.isArray(data)) {
-
+         status: this.API_STATES.LOADING,
+      }, () => {
+         axios.get(url)
+            .then((response) => {
                this.setState({
-                  fetchError: true,
-                  loading: false,
-                  errorMessage: 'Failed to load products'
+                  status: this.API_STATES.LOADED,
+                  products: response.data
                })
-
-            } else {
-               this.setState({
-                  AllProducts: response.data,
-                  loading: false
-               })
-            }
-
-         })
-
-         .catch((error) => {
-            let message = ''
-
-            if (error.request) {
-               message = "Failed to load: No response was received"
-            } else {
-               message = "This page didn't load: Fetching from the API is failed."
-            }
-
-            this.setState({
-               fetchError: true,
-               loading: false,
-               errorMessage: message
             })
-         });
+            .catch((error) => {
+               this.setState({
+                  status: this.API_STATES.ERROR,
+                  errorMessage: "An API error occurred. Please try again in a few minutes."
+               })
+            })
+      })
+   }
+   componentDidMount() {
+      this.FetchData(this.URL)
+   }
+   reloadData = () => {
+      this.FetchData(this.URL)
    }
 
    render() {
+      let products = this.state.products;
       return (
          <>
             {
-               this.state.loading && <Loader />
+               this.state.status === this.API_STATES.LOADING && <Loader />
+            }
+            {
+               this.state.status === this.API_STATES.ERROR &&
+               <div className="error-message">
+                  <i className="fa fa-exclamation-circle"></i>
+                  <h2>Oops! Something went wrong</h2>
+                  <h4>{this.state.errorMessage}</h4>
+               </div>
+            }
+            {
+               this.state.status === this.API_STATES.LOADED && products.length === 0 &&
+               <div className='error'>
+                  <i className="fa fa-exclamation-circle"></i>
+                  <h2>Oops! Something went wrong</h2>
+                  <h4>No products available at the moment. Please try after some time.</h4>
+               </div>
             }
 
             <div className="main">
                <ul>
                   {
-                     this.state.AllProducts.map((product) => {
+                     this.state.status === this.API_STATES.LOADED && products.length > 0 &&
+                     products.map((product) => {
                         return (
                            <li key={product.id}>
                               <Link to={`/product/${product.id}`}>
@@ -87,26 +94,13 @@ class AllProducts extends React.Component {
                            </li>
                         )
                      })
+
                   }
                </ul>
             </div>
-
-            {
-               !this.state.loading &&
-               this.state.fetchError &&
-               (
-                  <div className="error-message">
-                     <i className="fa fa-exclamation-circle"></i>
-                     <h2>Oops! Something went wrong</h2>
-                     <h5>{this.state.errorMessage}</h5>
-                  </div>
-               )
-            }
          </>
+
       )
-   }
-   componentDidMount() {
-      this.FetchData()
    }
 }
 

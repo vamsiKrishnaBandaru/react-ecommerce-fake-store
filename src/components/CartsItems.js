@@ -7,57 +7,75 @@ import { Link } from 'react-router-dom';
 class CartsItems extends Component {
    constructor(props) {
       super(props);
-      this.state = {
-         SingleProduct: '',
-         fetchError: false,
-         loading: true,
-         showNoProducts: false,
-         errorMessage: ''
+
+      this.API_STATES = {
+         LOADING: "loading",
+         LOADED: "loaded",
+         ERROR: "error",
       }
+
+      this.state = {
+         SingleProduct: null,
+         status: this.API_STATES.LOADING,
+         errorMessage: "",
+
+      };
+
+      this.URL = `https://fakestoreapi.com/products/${this.props.productId}`;
    }
 
-   componentDidMount() {
-      axios.get(`https://fakestoreapi.com/products/${this.props.productId}`)
-         .then((response) => {
-            let data = response.data
-            if (data === "") {
+   fetchData = (url) => {
+      this.setState({
+         status: this.API_STATES.LOADING,
+      }, () => {
+         axios.get(url)
+            .then((response) => {
                this.setState({
-                  showNoProducts: true,
-                  loading: false
+                  status: this.API_STATES.LOADED,
+                  SingleProduct: response.data,
                })
-            } else {
-               this.setState({
-                  SingleProduct: data,
-                  loading: false
-               })
-            }
-         })
 
-         .catch((error) => {
-            let message = ''
-
-            if (error.request) {
-               message = "Failed to load: No response was received"
-            } else {
-               message = "This page didn't load: Fetching from the API is failed."
-            }
-
-            this.setState({
-               fetchError: true,
-               errorMessage: message
             })
-         });
+            .catch((error) => {
+               this.setState({
+                  status: this.API_STATES.ERROR,
+                  errorMessage: "An API error occurred. Please try again in a few minutes."
+               })
+            })
+      })
    }
+
+   componentDidMount = () => {
+      this.fetchData(this.URL)
+   }
+
+   reloadData = () => {
+      this.fetchData(this.URL)
+   }
+
    render() {
       let product = this.state.SingleProduct
       return (
          <>
             {
-               this.state.loading && <Loader />
+               this.state.status === this.API_STATES.LOADING && <Loader />
+            }
+            {
+               this.state.status === this.API_STATES.ERROR &&
+               <div className='error'>
+                  <h1>{this.state.errorMessage}</h1>
+               </div>
             }
 
             {
-               !this.state.loading && !this.state.fetchError && Object.keys(product).includes('title') === true &&
+               this.state.status === this.API_STATES.LOADED && product !== null &&
+               <div className='error'>
+                  <h1>No products available at the moment. Please try after some time</h1>
+               </div>
+            }
+
+            {
+               this.state.status === this.API_STATES.LOADED && product !== null && Object.keys(product).includes('title') === true &&
                <div className='CartItem'>
                   <div>
                      <Link to={`/product/${this.props.productId}`}>
@@ -72,10 +90,6 @@ class CartsItems extends Component {
                      <div className="rating">{product.rating.rate}({product.rating.count})</div>
                      <div className="price">${product.price}</div>
                      <h3>Quantity: {this.props.quantity}</h3>
-                     {/* <div className='quantityContainer'>
-                        <button className='Decrement' onClick={this.Decrement}>-</button>
-                                                <button className='Increment' onClick={this.Increment}>+</button>
-                     </div> */}
                      <h5 className='totalProductCost'>total = ${product.price * this.props.quantity}</h5>
                   </div>
                </div>

@@ -6,68 +6,83 @@ import CartsItems from './CartsItems';
 
 class Cart extends React.Component {
    constructor(props) {
-      super(props)
-      this.state = {
-         loading: false,
-         fetchError: false,
-         errorMessage: '',
-         AllCartItems: null,
+      super(props);
+
+      this.API_STATES = {
+         LOADING: "loading",
+         LOADED: "loaded",
+         ERROR: "error",
       }
+
+      this.state = {
+         AllCartItems: null,
+         status: this.API_STATES.LOADING,
+         errorMessage: "",
+      };
+
+      this.URL = 'https://fakestoreapi.com/carts/1';
    }
 
-   FetchData = () => {
+   fetchData = (url) => {
       this.setState({
-         loading: true,
-         fetchError: false,
-      })
-
-      axios.get('https://fakestoreapi.com/carts/1')
-         .then((response) => {
-
-            let data = response.data
-            if (data === null || !data) {
+         status: this.API_STATES.LOADING,
+      }, () => {
+         axios.get(url)
+            .then((response) => {
                this.setState({
-                  fetchError: true,
-                  loading: false,
-                  errorMessage: 'No cart data available'
-               })
-            } else {
-               this.setState({
+                  status: this.API_STATES.LOADED,
                   AllCartItems: response.data,
-                  loading: false
                })
-            }
-         })
-
-         .catch((error) => {
-            let message = ''
-
-            if (error.request) {
-               message = "Failed to load: No response was received"
-            } else {
-               message = "This page didn't load: Fetching from the API is failed."
-            }
-
-            this.setState({
-               fetchError: true,
-               loading: false,
-               errorMessage: message
             })
-         });
+            .catch((error) => {
+               this.setState({
+                  status: this.API_STATES.ERROR,
+                  errorMessage: "An API error occurred. Please try again after few minutes."
+               })
+            })
+      })
+   }
+
+   componentDidMount = () => {
+      this.fetchData(this.URL)
+   }
+
+   reloadData = () => {
+      this.fetchData(this.URL)
    }
 
    render() {
+      let AllCartItems = this.state.AllCartItems
       return (
          <>
             {
-               this.state.loading && <Loader />
+               this.state.status === this.API_STATES.LOADING && <Loader />
+            }
+            {
+               this.state.status === this.API_STATES.ERROR &&
+               <div className="error-message">
+                  <i className="fa fa-exclamation-circle"></i>
+                  <h2>Oops! Something went wrong</h2>
+                  <h4>{this.state.errorMessage}</h4>
+               </div>
             }
 
-            {!this.state.loading && this.state.AllCartItems !== null &&
+            {
+               this.state.status === this.API_STATES.LOADED && AllCartItems === "" &&
+               <div className="error-message">
+                  <i className="fa fa-exclamation-circle"></i>
+                  <h2>Oops! Something went wrong</h2>
+                  <h4>No products available at the moment. Please try again later.</h4>
+               </div>
+            }
+
+            {
+               AllCartItems !== null &&
+               this.state.status === this.API_STATES.LOADED &&
                <div className="CartContainer">
                   <ul className='Cart'>
                      {
-                        this.state.AllCartItems.products.map(product => {
+                        AllCartItems.products.map(product => {
                            return (
                               <li key={product.productId}>
                                  <CartsItems productId={product.productId}
